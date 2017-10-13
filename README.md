@@ -66,7 +66,7 @@ import VLoadmore from '../public/loadmore.vue'
 ```
  import VPickdate from '../public/Pickdate.vue'
  
- <v-pickdate :pickStyle="pickStyle"
+ <v-pickdate :pickStyle="pickStyle" :minDate="minDate" :maxDate="maxDate" :isEdit="false"
               :pickDate="pickDate" :isTime="true" @output="writePut"   @cancelPick="hidePick">
  </v-pickdate>
 
