@@ -3,7 +3,10 @@ lazyload , infinite-scroll , loadmore , pickdate
 
 ## 查看demo
 ```
-git clone
+git clone https://github.com/523451928/vue-plugin.git
+cd vue-plugin
+npm install
+npm run dev
 ```
 
 ## lazyload 使用方法 
