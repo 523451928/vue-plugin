@@ -1,6 +1,11 @@
 # vue-pulgin
 lazyload , infinite-scroll , loadmore , pickdate
 
+## 查看demo
+```
+git clone
+```
+
 ## lazyload 使用方法 
 * loadImg 未加载之前的loading图片
 * threshold 提前加载距离
