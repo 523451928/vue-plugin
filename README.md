@@ -10,10 +10,7 @@ npm run dev
 ```
 
 ## lazyload 使用方法 
-* loadImg 未加载之前的loading图片
-* threshold 提前加载距离
-* opa 未加载之前的图片透明度
-* duration 过渡时间
+
 ```
 import Lazyload from './directive/lazyload'
 
@@ -26,11 +23,14 @@ Vue.use(Lazyload,{
 
  <img v-for="(item,index) in imgArr" v-lazyload="item">
 ```
+| Option | Description |
+| ----- | ----- |
+| loadImg | String(default '') 未加载之前的loading图片 |
+| threshold | Number(default 100) 提前加载距离 |
+| opa | Number(default 0.3) 未加载之前的图片透明度 |
+| duration | Number(default 1000) 过渡时间|
 
 ## infinite-scroll 使用方法 
-* lv-infinite  加载函数
-* infinite-scroll-disabled  是否能继续加载
-* infinite-scroll-distance  提前加载距离
 ```
 import Infinite from './directive/infinite-scroll'
 
@@ -46,14 +46,13 @@ Vue.use(Infinite)
     <div class="no-more" v-if="!hasMore">没有更多了!</div>
 </ul>
 ```
+| Option | Description |
+| ----- | ----- |
+| v-infinite  | Function 加载更多函数 |
+| infinite-scroll-disabled | String 需要绑定在用了指令的dom元素上 指令会监听vue data绑定的loading |
+| infinite-scroll-distance | Number 提前加载距离 |
 
 ## loadmore 使用方法
-* top-method 下拉更新的方法  bottom-method 上拉加载的方法
-* all-bottom-loaded 是否所有的加载完毕 change-translate 返回值是容器的下拉或这上拉的位移
-* top-status-change 下拉更新 返回值是状态(pull,loading,drop)
-* bottom-status-change 上拉加载 返回值是状态(pull,loading,drop)
-* 注意 top-method方法执行后要重置(this.$refs.loadmore.onTopLoaded()) bottom-method 方法执行后要重置(this.$refs.loadmore.onBottomLoaded()) 
-
 ```
 import VLoadmore from '../public/loadmore.vue'
 
@@ -65,12 +64,18 @@ import VLoadmore from '../public/loadmore.vue'
   </ul>
 </v-loadmore>
 ```
+| Option | Description |
+| ----- | ----- |
+| top-method  | Function 下拉更新方法 |
+| bottom-method | Function 上拉加载方法 |
+| all-bottom-loaded | Bollean 是否所有的加载完毕,加载完毕后会关闭上拉加载 |
+| change-translate | Function 子组件派发的事件 返回值是容器的下拉或这上拉的位移 |
+| top-status-change | 下拉更新派发的事件 返回值是状态(pull,loading,drop) |
+| bottom-status-change | 上拉加载派发的事件 返回值是状态(pull,loading,drop) |
+
+* 注意 top-method方法执行后要重置(this.$refs.loadmore.onTopLoaded()) bottom-method 方法执行后要重置(this.$refs.loadmore.onBottomLoaded()) 
 
 ## pickdate 使用方法
-* pickStyle 日历组件的样式(主要是位置) pickDate(初始日期) minDate(最小日期) maxDate(最大日期) isTime(是否能选择时间) isEdit(是否能进行别的操作)
-* @cancelPick 点击取消pickdate组件后emit出来的方法
-* @output 选择日期后pickdate组件后emit出来的方法  返回值为选择的日期
-
 ```
  import VPickdate from '../public/Pickdate.vue'
  
@@ -79,3 +84,14 @@ import VLoadmore from '../public/loadmore.vue'
  </v-pickdate>
 
 ```
+
+| Option | Description |
+| ----- | ----- |
+| pickStyle | Object(default {}) 日历组件的样式(主要是positon) |
+| pickDate | String(default '2017-10-30') 初始日期 |
+| minDate | String(default '2017-10-30') 可以选择的最小日期 |
+| maxDate | String(default '2017-10-30') 可以选择的最小日期 |
+| isTime | Bollean(default false) 是否能选择时间 |
+| isEdit | Bollean(default false) 是否能进行其他操作 |
+| @cancelPick | 点击取消pickdate组件后emit出来的方法 |
+| @output | 选择日期后pickdate组件后emit出来的方法  返回值为选择的日期 |
