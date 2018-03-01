@@ -57,7 +57,7 @@ Vue.use(Infinite)
 import VLoadmore from '../public/loadmore.vue'
 
 <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :all-bottom-loaded="allLoaded"
-          @change-translate="changeTranslate"
+          :is-auto-loadmore="true" @change-translate="changeTranslate"
           @top-status-change="handleTopChange" @bottom-status-change="handleBottomChange" ref="loadmore">
   <ul>
     <li v-for="item in list">{{ item }}</li>
@@ -72,6 +72,7 @@ import VLoadmore from '../public/loadmore.vue'
 | change-translate | Function 子组件派发的事件 返回值是容器的下拉或这上拉的位移 |
 | top-status-change | 下拉更新派发的事件 返回值是状态(pull,loading,drop) |
 | bottom-status-change | 上拉加载派发的事件 返回值是状态(pull,loading,drop) |
+| is-auto-loadmore | Bollean 是否滚动到下面自动加载 |
 
 * 注意 top-method方法执行后要重置(this.$refs.loadmore.onTopLoaded()) bottom-method 方法执行后要重置(this.$refs.loadmore.onBottomLoaded()) 
 
