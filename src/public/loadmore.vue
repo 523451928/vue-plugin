@@ -23,6 +23,40 @@
 </template>
 
 <script>
+  /* eslint-disable */
+  let throttle=function(fn,delay){
+    let now , lastExec , timer , context , args
+
+    let excute=function(){
+      fn.apply(context,args)
+      lastExec = now
+    }
+
+    return function(){
+      context = this
+      args = arguments
+
+      now = Date.now()
+
+      if(timer){
+        clearTimeout(timer)
+        timer = null
+      }
+
+      if(lastExec){
+        let diff =delay - (now-lastExec)
+        if(diff<0){
+          excute()
+        }else{
+          timer=setTimeout(()=>{
+            excute()
+          },delay)
+        }
+      }else{
+        excute()
+      }
+    }
+  }
   export default {
     props: {
       noMoreText:{
@@ -82,6 +116,14 @@
       allBottomLoaded: {
         type: Boolean,
         default: false
+      },
+      isAutoLoadmore: {
+        type: Boolean,
+        default: false
+      },
+      preLoadingDistance: {
+        type: Number,
+        default: 50
       }
     },
     data(){
@@ -147,6 +189,10 @@
         if (typeof this.topMethod === 'function') {
           this.bindTouchEvents()
         }
+        if (this.isAutoLoadmore) {
+          let throttleFn = throttle(this.checkBottomReached, 200)
+          this.scrollEventTarget.addEventListener('scroll', throttleFn)
+        }
       },
       onTopLoaded(){
         this.translate = 0
@@ -210,8 +256,24 @@
       checkBottomReached(){
         if (this.scrollEventTarget === window) {
           let scrollTop = document.body.scrollTop || document.documentElement.scrollTop
+          if (this.isAutoLoadmore 
+                && scrollTop + document.documentElement.clientHeight >= document.body.scrollHeight - this.preLoadingDistance
+                && this.bottomStatus != 'loading' && !this.allBottomLoaded) {
+            this.bottomStatus = 'loading'
+            this.bottomMethod().then((res) => {
+              this.bottomStatus = 'pull'
+            })
+          }
           return scrollTop + document.documentElement.clientHeight >= document.body.scrollHeight
         } else {
+          if (this.isAutoLoadmore 
+                && this.$el.getBoundingClientRect().bottom <= this.scrollEventTarget.getBoundingClientRect().bottom + 1 + this.preLoadingDistance
+                && this.bottomStatus != 'loading' && !this.allBottomLoaded) {
+            this.bottomStatus = 'loading'
+            this.bottomMethod().then((res) => {
+              this.bottomStatus = 'pull'
+            })
+          }
           return this.$el.getBoundingClientRect().bottom <= this.scrollEventTarget.getBoundingClientRect().bottom + 1
         }
       },
@@ -249,13 +311,12 @@
           }
           this.topStatus = this.translate > this.topDistance ? 'drop' : 'pull'
         }
-
         if (this.direction == 'up') {
           this.bottomReached = this.bottomReached || this.checkBottomReached()
         }
         if (typeof this.bottomMethod == 'function' && this.direction == 'up' && this.bottomStatus != 'loading' && this.bottomReached && !this.allBottomLoaded) {
-          event.stopPropagation()
           event.preventDefault()
+          event.stopPropagation()
           this.translate = this.getScrollTop(this.scrollEventTarget) - this.startScrollTop + distance
           if (this.translate > 0) {
             this.translate = 0
@@ -297,22 +358,18 @@
   .my-loadmore {
     overflow: hidden;
   }
-
   .my-loadmore .no-more{
     line-height: 50px;
     text-align: center;
   }
-
   .my-loadmore .is-dropped {
     transition: all .2s;
   }
-
   .loadmore-content .my-loadmore-top {
     margin-top: -50px;
     line-height: 50px;
     text-align: center;
   }
-
   .loadmore-content .my-loadmore-bottom {
     margin-bottom: -50px;
     line-height: 50px;
